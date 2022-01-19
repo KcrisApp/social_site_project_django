@@ -1,4 +1,3 @@
-from multiprocessing import context
 from django.shortcuts import render, HttpResponseRedirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
@@ -14,12 +13,13 @@ def registrazione_view(request):
             email = form.cleaned_data["email"]
             password = form.cleaned_data["password1"]
 
-            User.objects.create(username=username, password=password, email=email)
+            User.objects.create_user(username=username, password=password, email=email)
 
             user = authenticate(username=username, password=password)
             login(request, user)
-            return HttpResponseRedirect('/')
+            return HttpResponseRedirect("/")
     else:
         form = FormRegistrazione()
-        context = {"form":form}
-        return render(request, "accounts/registrazione.html", context)
+        
+    context = {"form": form}
+    return render(request, "accounts/registrazione.html", context)
