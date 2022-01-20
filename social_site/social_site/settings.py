@@ -39,7 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     "crispy_forms",
     "crispy_bootstrap5",
-    'accounts'
+    'accounts',
+    'core',
+    'forum'
 ]
 
 MIDDLEWARE = [
@@ -57,7 +59,11 @@ ROOT_URLCONF = 'social_site.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates', BASE_DIR / 'accounts/templates'],
+        'DIRS': [BASE_DIR / 'templates', 
+                 BASE_DIR / 'accounts/templates',
+                 BASE_DIR / 'core/templates',
+                 BASE_DIR / 'forum/templates',
+                 ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
