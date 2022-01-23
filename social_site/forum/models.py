@@ -1,6 +1,7 @@
 from turtle import onclick, ondrag
 from django.db import models
 from django.contrib.auth.models import User
+from django.urls import reverse
 
 # Create your models here.
 
@@ -12,7 +13,10 @@ class Sezione(models.Model):
 
     def __str__(self):
         return self.nome_sezione
-    
+
+    def get_absolute_url(self):
+        return reverse("sezione_view", kwargs={"pk": self.pk})
+
     class Meta:
         verbose_name = "Sezione"
         verbose_name_plural = "Sezioni"
@@ -26,6 +30,8 @@ class Discussione(models.Model):
 
     def __str__(self):
         return self.titolo
+    
+    
     
     class Meta:
         verbose_name = "Discussione"
