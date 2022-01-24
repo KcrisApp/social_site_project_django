@@ -11,5 +11,6 @@ class StafMixing(UserPassesTestMixin):
             raise PermissionDenied(self.get_permission_denied_message())
         return redirect_to_login(self.request.get_full_path(), self.get_login_url(), self.get_redirect_field_name())  
     
+    # Se la funzione restituisce true il test passa
     def test_func(self):
         return self.request.user.is_staff
