@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404, render
 from django.views.generic.edit import CreateView
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
-from .models import Post, Sezione
+from .models import Discussione, Post, Sezione
 from .forms import DiscussioneModelForm
 from .mixins import StafMixing
 # Create your views here.
@@ -42,3 +42,8 @@ def crea_discussione(request, pk):
     context = {"form": form, "sezione":sezione}
     return render(request, "forum/crea_discussione.html", context)
 
+def visualizza_discussione(request, pk):
+    discussione = get_object_or_404(Discussione, pk=pk)
+    post_discussione = Post.objects.filter(discussione=discussione)
+    context = {'discussione': discussione, 'post_discussione': post_discussione}
+    
