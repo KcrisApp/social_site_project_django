@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from .models import Discussione, Post, Sezione
 from .forms import DiscussioneModelForm
 from .mixins import StafMixing
+
 # Create your views here.
 
 # Creo una nuova sezione usando le generic View
@@ -17,7 +18,8 @@ class CreaSezione(StafMixing, CreateView):
 # View per la visualizzazione delle sezioni
 def visualizza_sezione(request, pk):
     sezione = get_object_or_404(Sezione, pk=pk)
-    context ={"sezione": sezione}
+    discussione_sezione = Discussione.objects.filter(sezione_appartenenza=sezione).order_by("-data_creazione")
+    context ={"sezione": sezione, "discussioni": discussione_sezione}
     return render(request, "forum/singola_sezione.html", context)
 
 # View per creare una discussione
@@ -42,7 +44,7 @@ def crea_discussione(request, pk):
             discussione.save()
 
             primo_post = Post.objects.create(discussione=discussione, autore_post=request.user, contenuto = form.cleaned_data['contenuto'])
-            return HttpResponseRedirect("/admin")
+            return HttpResponseRedirect(discussione.get_absolute_url())
     else:
         form = DiscussioneModelForm()
 
@@ -51,6 +53,6 @@ def crea_discussione(request, pk):
 
 def visualizza_discussione(request, pk):
     discussione = get_object_or_404(Discussione, pk=pk)
-    post_discussione = Post.objects.filter(discussione=discussione)
-    context = {'discussione': discussione, 'post_discussione': post_discussione}
-    
+    posts_discussione = Post.objects.filter(discussione=discussione)
+    context = {'discussione': discussione, 'post_discussione': posts_discussione}
+    return render(request,"forum/singola_discussione.html", context)

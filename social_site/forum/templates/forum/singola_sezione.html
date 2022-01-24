@@ -10,7 +10,15 @@
     <div class="card-header">
       <h5 class="card-title">{{ sezione.nome_sezione }}</h5>
       <h6 class="card-text">{{ sezione.descrizione }}</h6>
+    </div>
+
+    <div class="card-body">
       
+      {% for discussione in discussioni  %}
+        <p><a href="{{ discussione.get_absolute_url }}">{{ discussione.titolo }}</a></p>
+        <p>{{ discussione.autore_discussione }}</p>
+      {% endfor %}
+        
     </div>
   </div>
 

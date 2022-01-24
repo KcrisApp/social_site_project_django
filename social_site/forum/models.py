@@ -32,7 +32,9 @@ class Discussione(models.Model):
         return self.titolo
     
     
-    
+    def get_absolute_url(self):
+        return reverse("singola_discussione", kwargs={"pk": self.pk})
+
     class Meta:
         verbose_name = "Discussione"
         verbose_name_plural= "Discussioni"
