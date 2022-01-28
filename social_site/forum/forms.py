@@ -1,7 +1,7 @@
 from cProfile import label
 from dataclasses import fields
 from django import forms
-from .models import Discussione
+from .models import Discussione, Post
 
 # Creo form per la discussione a partire dal modello
 # Aggiungo il campo contenuto che servira a creare il primo post
@@ -19,6 +19,15 @@ class DiscussioneModelForm(forms.ModelForm):
     class Meta:
         model = Discussione
         fields = ["titolo", "contenuto"]
-        widget = {
+        widgets = {
             "titolo":forms.TextInput(attrs={"placeholder":"Titolo della discussione"})
+        }
+
+class PostModelForm(forms.ModelForm):
+    
+    class Meta:
+        model = Post
+        fields = ['contenuto']
+        widgets = {
+            "label": "Messaggio"
         }

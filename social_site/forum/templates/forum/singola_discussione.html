@@ -22,6 +22,21 @@
             </div>
         </div>
     {% endfor %}
+
+    
+    {% if request.user.is_authenticated %}
+
+    {% include 'forum/form_risposta.html' %}
+
+    {% else %}
+    <div class="alert alert-info" role="alert">
+        Per partecipare devi effettuare il  <a href="{% url 'login' %}?next={{ request.get_full_path }}">Login</a>
+    </div>
+        
+    {% endif %}
+        
+
+    
         
 {% endblock content %}
     

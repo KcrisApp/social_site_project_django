@@ -1,10 +1,12 @@
+from audioop import reverse
 from django.shortcuts import get_object_or_404, render
 from django.views.generic.edit import CreateView
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponseBadRequest
 from django.contrib.auth.decorators import login_required
 from .models import Discussione, Post, Sezione
-from .forms import DiscussioneModelForm
+from .forms import DiscussioneModelForm, PostModelForm
 from .mixins import StafMixing
+from django.urls import reverse
 
 # Create your views here.
 
@@ -54,5 +56,25 @@ def crea_discussione(request, pk):
 def visualizza_discussione(request, pk):
     discussione = get_object_or_404(Discussione, pk=pk)
     posts_discussione = Post.objects.filter(discussione=discussione)
-    context = {'discussione': discussione, 'post_discussione': posts_discussione}
+    form_risposta = PostModelForm()
+    context = {'discussione': discussione, 'post_discussione': posts_discussione, 'form_risposta':form_risposta}
+    
     return render(request,"forum/singola_discussione.html", context)
+
+@login_required
+def aggiungi_risposta(request, pk):
+    
+    discussione = get_object_or_404(Discussione, pk=pk)
+    if request.method == "POST":
+        form = PostModelForm(request.POST)
+        if form.is_valid():
+            form.save(commit=False)
+            form.instance.discussione = discussione
+            form.instance.autore_post = request.user
+            form.save()
+
+            url_discussione = reverse("singola_discussione", kwargs={"pk": pk})
+            return HttpResponseRedirect(url_discussione)
+    else:
+        return HttpResponseBadRequest()
+    
