@@ -25,7 +25,7 @@ class Sezione(models.Model):
 class Discussione(models.Model):
     titolo = models.CharField(max_length=120)
     data_creazione = models.DateTimeField(auto_now_add=True)
-    autore_discussione = models.ForeignKey(User, on_delete=models.CASCADE)
+    autore_discussione = models.ForeignKey(User, on_delete=models.CASCADE,related_name="discussioni")
     sezione_appartenenza = models.ForeignKey(Sezione, on_delete=models.CASCADE)
 
     def __str__(self):
@@ -42,7 +42,7 @@ class Discussione(models.Model):
 
 #model per i post
 class Post(models.Model):
-    autore_post = models.ForeignKey(User,on_delete=models.CASCADE, related_name="post")
+    autore_post = models.ForeignKey(User,on_delete=models.CASCADE, related_name="posts")
 
     contenuto =models.TextField()
     data_creazione = models.DateTimeField(auto_now_add=True)

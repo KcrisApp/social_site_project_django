@@ -3,6 +3,7 @@ from django.shortcuts import get_object_or_404, render
 from django.views.generic.edit import CreateView
 from django.http import HttpResponseRedirect, HttpResponseBadRequest
 from django.contrib.auth.decorators import login_required
+
 from .models import Discussione, Post, Sezione
 from .forms import DiscussioneModelForm, PostModelForm
 from .mixins import StafMixing
