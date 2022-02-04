@@ -7,13 +7,16 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 # Create your views here.
 # def homepage(request):
 #     return render(request, 'core/homepage.html')
-
+# Con le generic listView creo una funzione che prende tutte le sezioni dal db e ritorna una lista in home
 class HomeView(ListView):
-    queryset  =Sezione.objects.all()
+    queryset  = Sezione.objects.all()
     template_name = 'core/homepage.html'
     context_object_name = "lista_sezioni"
-#view per la gestione degli utenti
 
+
+#view per la gestione degli utenti
+# LoginRequiredMixin per far si che solo un utente loggato possa vedere la lista
+#  utenti
 class UserListView(LoginRequiredMixin,ListView):
     model = User
     template_name = "core/users.html"
