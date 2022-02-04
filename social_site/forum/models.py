@@ -1,3 +1,4 @@
+import math
 from turtle import onclick, ondrag
 from django.db import models
 from django.contrib.auth.models import User
@@ -45,6 +46,11 @@ class Discussione(models.Model):
     def get_absolute_url(self):
         return reverse("singola_discussione", kwargs={"pk": self.pk})
 
+    def get_n_page(self):
+
+        posts_discussione = self.post_set.count()
+        n_pagine = math.ceil(posts_discussione / 5)
+        return n_pagine
    
 
 

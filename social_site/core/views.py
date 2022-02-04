@@ -4,6 +4,7 @@ from django.views.generic.list import ListView
 from forum.models import Discussione, Sezione, Post
 from django.contrib.auth.mixins import LoginRequiredMixin
 
+
 # Create your views here.
 # def homepage(request):
 #     return render(request, 'core/homepage.html')

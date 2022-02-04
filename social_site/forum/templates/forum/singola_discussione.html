@@ -8,10 +8,10 @@
 {% block content %}
     
     
-    {% for post in post_discussione  %}
+    {% for post in posts_discussione  %}
 
     <div class="card my-3">
-        {% if forloop.first %}
+        {% if forloop.first and not "pagina" in request.get_full_path %}
         <div class="card-header">
             <h3>{{ discussione.titolo }}</h3>
             <p class="text-muted">{{ discussione.data_creazione|date:"D d M Y" }}
@@ -23,6 +23,13 @@
             
             <p class="text-muted mb-0">
                 {{ post.data_creazione|date:"D d M Y"  }}
+                
+                {% if request.user == post.autore_post %}
+
+                    <a href="{% url 'cancella_post' id=discussione.pk pk=post.pk %}"> Elimina</a>
+                    
+                {% endif %}
+                    
             </p>
         </div>
         {% endif %}
@@ -43,6 +50,25 @@
 
         </div>
     {% endfor %}
+
+    <div class="text-right">
+        <span class="step-links">
+            {% if posts_discussione.has_previous %}
+                <a href="?pagina=1">&laquo; prima</a>
+                <a href="?pagina={{ posts_discussione.previous_page_number }}">precedente</a>
+            {% endif %}
+
+            <span class="current">
+                Pagina {{ posts_discussione.number }} di {{ posts_discussione.paginator.num_pages }}.
+            </span>
+
+            {% if posts_discussione.has_next %}
+                <a href="?pagina={{ posts_discussione.next_page_number }}">successiva</a>
+                <a href="?pagina={{ posts_discussione.paginator.num_pages }}">ultima &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+
 
     
     {% if request.user.is_authenticated %}

@@ -1,9 +1,9 @@
 from audioop import reverse
 from django.shortcuts import get_object_or_404, render
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, DeleteView 
 from django.http import HttpResponseRedirect, HttpResponseBadRequest
 from django.contrib.auth.decorators import login_required
-
+from django.core.paginator import Paginator
 from .models import Discussione, Post, Sezione
 from .forms import DiscussioneModelForm, PostModelForm
 from .mixins import StafMixing
@@ -57,8 +57,13 @@ def crea_discussione(request, pk):
 def visualizza_discussione(request, pk):
     discussione = get_object_or_404(Discussione, pk=pk)
     posts_discussione = Post.objects.filter(discussione=discussione)
+    
+    paginator = Paginator(posts_discussione, 5)
+    page = request.GET.get("pagina")
+    posts = paginator.get_page(page)
+    
     form_risposta = PostModelForm()
-    context = {'discussione': discussione, 'post_discussione': posts_discussione, 'form_risposta':form_risposta}
+    context = {'discussione': discussione, 'posts_discussione': posts, 'form_risposta':form_risposta}
     
     return render(request,"forum/singola_discussione.html", context)
 
@@ -75,7 +80,21 @@ def aggiungi_risposta(request, pk):
             form.save()
 
             url_discussione = reverse("singola_discussione", kwargs={"pk": pk})
-            return HttpResponseRedirect(url_discussione)
+            pagine_in_discussione = discussione.get_n_page()
+            if pagine_in_discussione > 1:
+                succes_url = url_discussione +"?pagina=" + str(pagine_in_discussione)
+                return HttpResponseRedirect(succes_url)
+            else:
+                 
+                return HttpResponseRedirect(url_discussione)
     else:
         return HttpResponseBadRequest()
+    
+class CancellaPost(DeleteView):
+    model = Post
+    success_url = "/"
+    def get_queryset(self):
+            queryset = super().get_queryset()
+            return queryset.filter(autore_post_id=self.request.user.id)
+
     

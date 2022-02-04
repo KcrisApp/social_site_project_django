@@ -8,6 +8,6 @@ urlpatterns = [
     path('sezione/<int:pk>/crea-discussione', views.crea_discussione , name='crea_discussione'),
     path('discussione/<int:pk>/', views.visualizza_discussione , name='singola_discussione'),
     path('discussione/<int:pk>/rispondi/', views.aggiungi_risposta , name='rispondi_a_discussione'),
-    # path('user/<str:username>/', views.user_profile_view , name='user_profile'),
+  path("discussione/<int:id>/elimina-post/<int:pk>/",views.CancellaPost.as_view(), name="cancella_post",),
     
 ]
